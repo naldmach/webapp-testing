@@ -1,0 +1,47 @@
+{
+  "name": "webapp-test-framework",
+  "version": "1.0.0",
+  "description": "Modern testing framework built with Playwright for end-to-end testing of web applications with advanced reporting capabilities",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:api": "playwright test tests/api",
+    "test:visual": "playwright test tests/visual",
+    "test:mobile": "playwright test tests/mobile",
+    "report": "playwright show-report",
+    "postman": "newman run postman/collection.json -e postman/environment.json",
+    "install:browsers": "playwright install",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "e2e",
+    "typescript",
+    "visual-testing",
+    "api-testing",
+    "mobile-testing"
+  ],
+  "author": "Test Framework Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "eslint": "^8.55.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "newman": "^6.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
