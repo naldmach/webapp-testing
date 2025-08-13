@@ -45,7 +45,7 @@ export class MobileTesting {
     await this.testPinchZoom();
 
     // Test long press
-    await this.testLongPress();
+    await this.testLongPress("body");
   }
 
   /**

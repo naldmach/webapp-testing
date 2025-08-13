@@ -1,4 +1,5 @@
-import { test, expect, devices } from "../../src/base/base-test";
+import { test, expect } from "../../src/base/base-test";
+import { devices } from "@playwright/test";
 
 test.describe("Mobile Responsive Tests", () => {
   test("test mobile navigation", async ({ page, mobileTesting }) => {
@@ -57,9 +58,11 @@ test.describe("Mobile Responsive Tests", () => {
 
 // Test specific mobile devices
 test.describe("Device-Specific Tests", () => {
-  test.use({ ...devices["iPhone 12"] });
-
-  test("iPhone 12 specific tests", async ({ page, testHelpers }) => {
+  test("iPhone 12 specific tests", async ({ browser }) => {
+    const context = await browser.newContext({
+      ...devices["iPhone 12"],
+    });
+    const page = await context.newPage();
     await page.goto("/");
 
     // Test safe area handling
@@ -72,14 +75,17 @@ test.describe("Device-Specific Tests", () => {
     // Verify safe area is handled
     expect(safeAreaTop).toBeTruthy();
 
-    await testHelpers.takeScreenshot("iphone-12-homepage");
+    await page.screenshot({ path: "screenshots/iphone-12-homepage.png" });
+    await context.close();
   });
 });
 
 test.describe("Tablet Tests", () => {
-  test.use({ ...devices["iPad Pro"] });
-
-  test("iPad Pro layout tests", async ({ page, testHelpers }) => {
+  test("iPad Pro layout tests", async ({ browser }) => {
+    const context = await browser.newContext({
+      ...devices["iPad Pro"],
+    });
+    const page = await context.newPage();
     await page.goto("/");
 
     // Test split-screen layout if applicable
@@ -89,7 +95,8 @@ test.describe("Tablet Tests", () => {
       expect(isVisible).toBeTruthy();
     }
 
-    await testHelpers.takeScreenshot("ipad-pro-homepage");
+    await page.screenshot({ path: "screenshots/ipad-pro-homepage.png" });
+    await context.close();
   });
 });
 

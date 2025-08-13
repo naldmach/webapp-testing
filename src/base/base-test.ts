@@ -87,8 +87,8 @@ export class BaseTest {
     // Clear cookies and local storage
     await this.context.clearCookies();
     await this.page.evaluate(() => {
-      localStorage.clear();
-      sessionStorage.clear();
+      if (typeof localStorage !== "undefined") localStorage.clear();
+      if (typeof sessionStorage !== "undefined") sessionStorage.clear();
     });
   }
 

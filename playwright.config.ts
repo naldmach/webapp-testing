@@ -118,9 +118,11 @@ export default defineConfig({
 
   /* Expect settings */
   expect: {
-    /* Threshold for visual comparisons */
-    threshold: 0.2,
     /* Timeout for expect assertions */
     timeout: 10000,
+    /* Visual comparison settings */
+    toHaveScreenshot: {
+      threshold: 0.2,
+    },
   },
 });
