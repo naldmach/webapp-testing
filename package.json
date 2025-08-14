@@ -11,6 +11,8 @@
     "test:api": "playwright test tests/api",
     "test:visual": "playwright test tests/visual",
     "test:mobile": "playwright test tests/mobile",
+    "test:performance": "playwright test tests/performance",
+    "test:examples": "playwright test tests/examples",
     "report": "playwright show-report",
     "postman": "newman run postman/collection.json -e postman/environment.json",
     "install:browsers": "playwright install",

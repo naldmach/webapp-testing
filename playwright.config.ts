@@ -27,6 +27,7 @@ export default defineConfig({
     ["json", { outputFile: "test-results/results.json" }],
     ["list"],
     ["allure-playwright", { outputFolder: "allure-results" }],
+    ["./src/reporters/advanced-reporter.ts"],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
