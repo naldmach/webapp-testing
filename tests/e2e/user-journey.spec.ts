@@ -1,35 +1,35 @@
-import { test, expect } from "../../src/base/base-test";
+import { test, expect } from '../../src/base/base-test';
 
-test.describe("Complete User Journey Tests", () => {
-  test("user registration and login flow", async ({ page, testHelpers }) => {
+test.describe('Complete User Journey Tests', () => {
+  test('user registration and login flow', async ({ page, testHelpers }) => {
     // Navigate to registration page
-    await page.goto("/register");
+    await page.goto('/register');
     await testHelpers.waitForPageLoad();
 
     // Fill registration form
     const uniqueEmail = `test${Date.now()}@example.com`;
-    await testHelpers.typeText(page.locator("#username"), "testuser");
-    await testHelpers.typeText(page.locator("#email"), uniqueEmail);
-    await testHelpers.typeText(page.locator("#password"), "TestPassword123!");
+    await testHelpers.typeText(page.locator('#username'), 'testuser');
+    await testHelpers.typeText(page.locator('#email'), uniqueEmail);
+    await testHelpers.typeText(page.locator('#password'), 'TestPassword123!');
     await testHelpers.typeText(
-      page.locator("#confirmPassword"),
-      "TestPassword123!"
+      page.locator('#confirmPassword'),
+      'TestPassword123!'
     );
 
     // Submit registration
     await testHelpers.safeClick(page.locator('button[type="submit"]'));
 
     // Wait for success message or redirect
-    await expect(page.locator(".success-message")).toBeVisible({
+    await expect(page.locator('.success-message')).toBeVisible({
       timeout: 10000,
     });
 
     // Navigate to login
-    await page.goto("/login");
+    await page.goto('/login');
 
     // Login with new credentials
-    await testHelpers.typeText(page.locator("#email"), uniqueEmail);
-    await testHelpers.typeText(page.locator("#password"), "TestPassword123!");
+    await testHelpers.typeText(page.locator('#email'), uniqueEmail);
+    await testHelpers.typeText(page.locator('#password'), 'TestPassword123!');
     await testHelpers.safeClick(page.locator('button[type="submit"]'));
 
     // Verify successful login
@@ -38,15 +38,15 @@ test.describe("Complete User Journey Tests", () => {
     });
   });
 
-  test("shopping cart flow", async ({ page, testHelpers }) => {
+  test('shopping cart flow', async ({ page, testHelpers }) => {
     // Login first
-    await page.goto("/login");
-    await testHelpers.typeText(page.locator("#email"), "testuser@example.com");
-    await testHelpers.typeText(page.locator("#password"), "TestPassword123!");
+    await page.goto('/login');
+    await testHelpers.typeText(page.locator('#email'), 'testuser@example.com');
+    await testHelpers.typeText(page.locator('#password'), 'TestPassword123!');
     await testHelpers.safeClick(page.locator('button[type="submit"]'));
 
     // Navigate to products
-    await page.goto("/products");
+    await page.goto('/products');
     await testHelpers.waitForPageLoad();
 
     // Add items to cart
@@ -71,7 +71,7 @@ test.describe("Complete User Journey Tests", () => {
       // Update quantity
       const quantityInput = cartItems.first().locator('input[type="number"]');
       if ((await quantityInput.count()) > 0) {
-        await testHelpers.typeText(quantityInput, "2");
+        await testHelpers.typeText(quantityInput, '2');
       }
 
       // Remove an item
@@ -90,15 +90,15 @@ test.describe("Complete User Journey Tests", () => {
     }
   });
 
-  test("search and filter functionality", async ({ page, testHelpers }) => {
-    await page.goto("/products");
+  test('search and filter functionality', async ({ page, testHelpers }) => {
+    await page.goto('/products');
     await testHelpers.waitForPageLoad();
 
     // Test search
     const searchInput = page.locator('[data-testid="search-input"]');
     if ((await searchInput.count()) > 0) {
-      await testHelpers.typeText(searchInput, "test product");
-      await page.keyboard.press("Enter");
+      await testHelpers.typeText(searchInput, 'test product');
+      await page.keyboard.press('Enter');
       await testHelpers.waitForPageLoad();
 
       // Verify search results
@@ -137,11 +137,11 @@ test.describe("Complete User Journey Tests", () => {
     }
   });
 
-  test("user profile management", async ({ page, testHelpers }) => {
+  test('user profile management', async ({ page, testHelpers }) => {
     // Login
-    await page.goto("/login");
-    await testHelpers.typeText(page.locator("#email"), "testuser@example.com");
-    await testHelpers.typeText(page.locator("#password"), "TestPassword123!");
+    await page.goto('/login');
+    await testHelpers.typeText(page.locator('#email'), 'testuser@example.com');
+    await testHelpers.typeText(page.locator('#password'), 'TestPassword123!');
     await testHelpers.safeClick(page.locator('button[type="submit"]'));
 
     // Navigate to profile
@@ -149,21 +149,21 @@ test.describe("Complete User Journey Tests", () => {
     await testHelpers.safeClick(page.locator('[data-testid="profile-link"]'));
 
     // Update profile information
-    const nameInput = page.locator("#fullName");
+    const nameInput = page.locator('#fullName');
     if ((await nameInput.count()) > 0) {
-      await testHelpers.typeText(nameInput, "Updated Test User");
+      await testHelpers.typeText(nameInput, 'Updated Test User');
     }
 
-    const phoneInput = page.locator("#phone");
+    const phoneInput = page.locator('#phone');
     if ((await phoneInput.count()) > 0) {
-      await testHelpers.typeText(phoneInput, "+1234567890");
+      await testHelpers.typeText(phoneInput, '+1234567890');
     }
 
     // Save changes
     await testHelpers.safeClick(page.locator('[data-testid="save-profile"]'));
 
     // Verify success message
-    await expect(page.locator(".success-message")).toBeVisible({
+    await expect(page.locator('.success-message')).toBeVisible({
       timeout: 10000,
     });
 
@@ -175,16 +175,16 @@ test.describe("Complete User Journey Tests", () => {
       await testHelpers.safeClick(changePasswordButton);
 
       await testHelpers.typeText(
-        page.locator("#currentPassword"),
-        "TestPassword123!"
+        page.locator('#currentPassword'),
+        'TestPassword123!'
       );
       await testHelpers.typeText(
-        page.locator("#newPassword"),
-        "NewPassword123!"
+        page.locator('#newPassword'),
+        'NewPassword123!'
       );
       await testHelpers.typeText(
-        page.locator("#confirmNewPassword"),
-        "NewPassword123!"
+        page.locator('#confirmNewPassword'),
+        'NewPassword123!'
       );
 
       await testHelpers.safeClick(
@@ -192,19 +192,19 @@ test.describe("Complete User Journey Tests", () => {
       );
 
       // Verify password change success
-      await expect(page.locator(".success-message")).toBeVisible({
+      await expect(page.locator('.success-message')).toBeVisible({
         timeout: 10000,
       });
     }
   });
 
-  test("error handling and recovery", async ({ page, testHelpers }) => {
+  test('error handling and recovery', async ({ page, testHelpers }) => {
     // Test network error handling
-    await page.route("**/api/**", (route) => {
-      route.abort("failed");
+    await page.route('**/api/**', (route) => {
+      route.abort('failed');
     });
 
-    await page.goto("/products");
+    await page.goto('/products');
 
     // Verify error message is displayed
     const errorMessage = page.locator(
@@ -216,7 +216,7 @@ test.describe("Complete User Journey Tests", () => {
     const retryButton = page.locator('[data-testid="retry-button"]');
     if ((await retryButton.count()) > 0) {
       // Remove network interception
-      await page.unroute("**/api/**");
+      await page.unroute('**/api/**');
 
       await testHelpers.safeClick(retryButton);
       await testHelpers.waitForPageLoad();
@@ -227,18 +227,18 @@ test.describe("Complete User Journey Tests", () => {
     }
   });
 
-  test("accessibility navigation", async ({ page, testHelpers }) => {
-    await page.goto("/");
+  test('accessibility navigation', async ({ page, testHelpers }) => {
+    await page.goto('/');
 
     // Test keyboard navigation
-    await page.keyboard.press("Tab");
-    let focusedElement = await page.locator(":focus");
+    await page.keyboard.press('Tab');
+    let focusedElement = await page.locator(':focus');
     expect(await focusedElement.count()).toBeGreaterThan(0);
 
     // Navigate through several elements
     for (let i = 0; i < 5; i++) {
-      await page.keyboard.press("Tab");
-      focusedElement = await page.locator(":focus");
+      await page.keyboard.press('Tab');
+      focusedElement = await page.locator(':focus');
 
       // Verify focus is visible
       const isVisible = await focusedElement.isVisible();

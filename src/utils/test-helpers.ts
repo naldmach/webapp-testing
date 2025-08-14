@@ -1,4 +1,4 @@
-import { Page, expect, Locator } from "@playwright/test";
+import { Page, Locator } from '@playwright/test';
 
 export class TestHelpers {
   constructor(private page: Page) {}
@@ -10,8 +10,8 @@ export class TestHelpers {
     locator: Locator,
     timeout = 10000
   ): Promise<void> {
-    await locator.waitFor({ state: "visible", timeout });
-    await this.page.waitForLoadState("networkidle");
+    await locator.waitFor({ state: 'visible', timeout });
+    await this.page.waitForLoadState('networkidle');
   }
 
   /**
@@ -43,7 +43,7 @@ export class TestHelpers {
    * Take screenshot with timestamp
    */
   async takeScreenshot(name: string, fullPage = false): Promise<string> {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const filename = `${name}-${timestamp}.png`;
 
     await this.page.screenshot({
@@ -64,7 +64,7 @@ export class TestHelpers {
     const response = await this.page.waitForResponse(
       (response) => {
         const url = response.url();
-        return typeof urlPattern === "string"
+        return typeof urlPattern === 'string'
           ? url.includes(urlPattern)
           : urlPattern.test(url);
       },
@@ -85,7 +85,7 @@ export class TestHelpers {
     await this.page.route(urlPattern, (route) => {
       route.fulfill({
         status,
-        contentType: "application/json",
+        contentType: 'application/json',
         body: JSON.stringify(mockData),
       });
     });
@@ -97,7 +97,7 @@ export class TestHelpers {
   async elementExists(selector: string): Promise<boolean> {
     try {
       const element = this.page.locator(selector);
-      await element.waitFor({ state: "attached", timeout: 5000 });
+      await element.waitFor({ state: 'attached', timeout: 5000 });
       return true;
     } catch {
       return false;
@@ -116,8 +116,8 @@ export class TestHelpers {
    * Wait for page to be fully loaded
    */
   async waitForPageLoad(): Promise<void> {
-    await this.page.waitForLoadState("networkidle");
-    await this.page.waitForLoadState("domcontentloaded");
+    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('domcontentloaded');
   }
 
   /**
@@ -126,7 +126,7 @@ export class TestHelpers {
   async getTextContent(locator: Locator, timeout = 10000): Promise<string> {
     await this.waitForElementToBeStable(locator, timeout);
     const text = await locator.textContent();
-    return text?.trim() || "";
+    return text?.trim() || '';
   }
 
   /**

@@ -228,14 +228,15 @@ export class MobileTesting {
 
     // Get performance metrics
     const performanceMetrics = await this.page.evaluate(() => {
-      const navigation = performance.getEntriesByType(
-        "navigation"
-      )[0] as PerformanceNavigationTiming;
+      const navigationEntries = performance.getEntriesByType("navigation");
+      const navigation = navigationEntries[0] as PerformanceNavigationTiming;
       return {
         firstContentfulPaint:
           performance.getEntriesByName("first-contentful-paint")[0]
             ?.startTime || 0,
-        loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
+        loadComplete: navigation
+          ? navigation.loadEventEnd - navigation.loadEventStart
+          : 0,
       };
     });
 

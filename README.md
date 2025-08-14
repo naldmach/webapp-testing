@@ -8,9 +8,11 @@ Modern testing framework built with Playwright for end-to-end testing of web app
 - **API Testing**: Comprehensive REST API testing with performance metrics
 - **Mobile Testing**: Cross-device testing with touch gesture simulation
 - **Parallel Execution**: Fast test execution across multiple browsers and devices
-- **Advanced Reporting**: HTML reports, Allure integration, and custom dashboards
+- **Advanced Reporting**: HTML reports, Allure integration, custom dashboards, and real-time analytics
+- **Performance Testing**: Web Vitals measurement, network throttling, and load testing
 - **CI/CD Integration**: GitHub Actions workflows with artifact management
 - **Postman Integration**: Newman-based API collection testing
+- **Junior Developer Support**: Comprehensive guides and templates for all skill levels
 
 ## 🛠 Technologies
 
@@ -70,9 +72,11 @@ npm run test:headed
 npm run test:ui
 
 # Run specific test suites
-npm run test:api      # API tests only
-npm run test:visual   # Visual tests only
-npm run test:mobile   # Mobile tests only
+npm run test:api         # API tests only
+npm run test:visual      # Visual tests only
+npm run test:mobile      # Mobile tests only
+npm run test:performance # Performance tests only
+npm run test:examples    # Real-world demo tests
 
 # Debug tests
 npm run test:debug

@@ -1,4 +1,4 @@
-import { APIRequestContext, expect } from "@playwright/test";
+import { APIRequestContext, expect } from '@playwright/test';
 
 export class ApiTesting {
   constructor(private request: APIRequestContext) {}
@@ -41,7 +41,7 @@ export class ApiTesting {
     const response = await this.request.post(endpoint, {
       data,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...options?.headers,
       },
     });
@@ -67,7 +67,7 @@ export class ApiTesting {
     const response = await this.request.put(endpoint, {
       data,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...options?.headers,
       },
     });
@@ -108,12 +108,12 @@ export class ApiTesting {
     for (const [key, expectedType] of Object.entries(expectedSchema)) {
       expect(responseData).toHaveProperty(key);
 
-      if (typeof expectedType === "string") {
+      if (typeof expectedType === 'string') {
         expect(typeof responseData[key]).toBe(expectedType);
       } else if (Array.isArray(expectedType)) {
         expect(Array.isArray(responseData[key])).toBeTruthy();
-      } else if (typeof expectedType === "object") {
-        expect(typeof responseData[key]).toBe("object");
+      } else if (typeof expectedType === 'object') {
+        expect(typeof responseData[key]).toBe('object');
         await this.validateSchema(responseData[key], expectedType);
       }
     }
@@ -125,7 +125,7 @@ export class ApiTesting {
   async testPerformance(
     endpoint: string,
     options?: {
-      method?: "GET" | "POST" | "PUT" | "DELETE";
+      method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
       data?: any;
       maxResponseTime?: number;
       iterations?: number;
@@ -137,19 +137,19 @@ export class ApiTesting {
     for (let i = 0; i < iterations; i++) {
       const startTime = Date.now();
 
-      switch (options?.method || "GET") {
-        case "GET":
-          await this.get(endpoint);
-          break;
-        case "POST":
-          await this.post(endpoint, options?.data);
-          break;
-        case "PUT":
-          await this.put(endpoint, options?.data);
-          break;
-        case "DELETE":
-          await this.delete(endpoint);
-          break;
+      switch (options?.method || 'GET') {
+      case 'GET':
+        await this.get(endpoint);
+        break;
+      case 'POST':
+        await this.post(endpoint, options?.data);
+        break;
+      case 'PUT':
+        await this.put(endpoint, options?.data);
+        break;
+      case 'DELETE':
+        await this.delete(endpoint);
+        break;
       }
 
       const endTime = Date.now();
@@ -174,25 +174,25 @@ export class ApiTesting {
    * Test API with authentication
    */
   async authenticatedRequest(
-    method: "GET" | "POST" | "PUT" | "DELETE",
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     endpoint: string,
     token: string,
     data?: any
   ): Promise<any> {
     const headers = {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     };
 
     switch (method) {
-      case "GET":
-        return this.get(endpoint, { headers });
-      case "POST":
-        return this.post(endpoint, data, { headers });
-      case "PUT":
-        return this.put(endpoint, data, { headers });
-      case "DELETE":
-        return this.delete(endpoint, { headers });
+    case 'GET':
+      return this.get(endpoint, { headers });
+    case 'POST':
+      return this.post(endpoint, data, { headers });
+    case 'PUT':
+      return this.put(endpoint, data, { headers });
+    case 'DELETE':
+      return this.delete(endpoint, { headers });
     }
   }
 
@@ -201,7 +201,7 @@ export class ApiTesting {
    */
   async batchRequests(
     requests: Array<{
-      method: "GET" | "POST" | "PUT" | "DELETE";
+      method: 'GET' | 'POST' | 'PUT' | 'DELETE';
       endpoint: string;
       data?: any;
       headers?: Record<string, string>;
@@ -209,14 +209,14 @@ export class ApiTesting {
   ): Promise<any[]> {
     const promises = requests.map((req) => {
       switch (req.method) {
-        case "GET":
-          return this.get(req.endpoint, { headers: req.headers });
-        case "POST":
-          return this.post(req.endpoint, req.data, { headers: req.headers });
-        case "PUT":
-          return this.put(req.endpoint, req.data, { headers: req.headers });
-        case "DELETE":
-          return this.delete(req.endpoint, { headers: req.headers });
+      case 'GET':
+        return this.get(req.endpoint, { headers: req.headers });
+      case 'POST':
+        return this.post(req.endpoint, req.data, { headers: req.headers });
+      case 'PUT':
+        return this.put(req.endpoint, req.data, { headers: req.headers });
+      case 'DELETE':
+        return this.delete(req.endpoint, { headers: req.headers });
       }
     });
 
@@ -229,7 +229,7 @@ export class ApiTesting {
   private buildUrl(endpoint: string, params?: Record<string, string>): string {
     if (!params) return endpoint;
 
-    const url = new URL(endpoint, "http://localhost");
+    const url = new URL(endpoint, 'http://localhost');
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.append(key, value);
     });
@@ -241,11 +241,11 @@ export class ApiTesting {
    * Handle response and extract data
    */
   private async handleResponse(response: any): Promise<any> {
-    const contentType = response.headers()["content-type"] || "";
+    const contentType = response.headers()['content-type'] || '';
 
-    if (contentType.includes("application/json")) {
+    if (contentType.includes('application/json')) {
       return response.json();
-    } else if (contentType.includes("text/")) {
+    } else if (contentType.includes('text/')) {
       return response.text();
     } else {
       return response.body();

@@ -3,11 +3,11 @@ import {
   Page,
   BrowserContext,
   APIRequestContext,
-} from "@playwright/test";
-import { TestHelpers } from "../utils/test-helpers";
-import { VisualTesting } from "../utils/visual-testing";
-import { ApiTesting } from "../utils/api-testing";
-import { MobileTesting } from "../utils/mobile-testing";
+} from '@playwright/test';
+import { TestHelpers } from '../utils/test-helpers';
+import { VisualTesting } from '../utils/visual-testing';
+import { ApiTesting } from '../utils/api-testing';
+import { MobileTesting } from '../utils/mobile-testing';
 
 // Extend the base test with custom fixtures
 export const test = base.extend<{
@@ -37,7 +37,7 @@ export const test = base.extend<{
   },
 });
 
-export { expect } from "@playwright/test";
+export { expect } from '@playwright/test';
 
 // Base test class for common functionality
 export class BaseTest {
@@ -65,7 +65,7 @@ export class BaseTest {
       });
     }
 
-    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForLoadState('networkidle');
   }
 
   /**
@@ -87,8 +87,8 @@ export class BaseTest {
     // Clear cookies and local storage
     await this.context.clearCookies();
     await this.page.evaluate(() => {
-      if (typeof localStorage !== "undefined") localStorage.clear();
-      if (typeof sessionStorage !== "undefined") sessionStorage.clear();
+      if (typeof localStorage !== 'undefined') localStorage.clear();
+      if (typeof sessionStorage !== 'undefined') sessionStorage.clear();
     });
   }
 
@@ -114,7 +114,7 @@ export class BaseTest {
    * Take screenshot with test context
    */
   async takeScreenshot(name: string, fullPage = false): Promise<void> {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     await this.page.screenshot({
       path: `screenshots/${name}-${timestamp}.png`,
       fullPage,

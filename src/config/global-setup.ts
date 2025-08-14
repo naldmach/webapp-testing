@@ -1,22 +1,22 @@
-import { FullConfig } from "@playwright/test";
+import { FullConfig } from '@playwright/test';
 
-async function globalSetup(config: FullConfig) {
-  console.log("🚀 Starting global setup...");
+async function globalSetup(_config: FullConfig) {
+  console.log('🚀 Starting global setup...');
 
   // Setup environment variables
   process.env.TEST_START_TIME = new Date().toISOString();
 
   // Create necessary directories
-  const fs = require("fs");
-  const path = require("path");
+  const fs = require('fs');
+  const path = require('path');
 
   const dirs = [
-    "test-results",
-    "playwright-report",
-    "allure-results",
-    "screenshots/baseline",
-    "screenshots/actual",
-    "screenshots/diff",
+    'test-results',
+    'playwright-report',
+    'allure-results',
+    'screenshots/baseline',
+    'screenshots/actual',
+    'screenshots/diff',
   ];
 
   dirs.forEach((dir) => {
@@ -30,12 +30,12 @@ async function globalSetup(config: FullConfig) {
   // Setup test data
   await setupTestData();
 
-  console.log("✅ Global setup completed");
+  console.log('✅ Global setup completed');
 }
 
 async function setupTestData() {
   // Initialize any test data, database connections, etc.
-  console.log("📊 Setting up test data...");
+  console.log('📊 Setting up test data...');
 
   // Example: Create test users, seed data, etc.
   // This would typically involve API calls or database setup

@@ -1,4 +1,4 @@
-import { TestResult } from "@playwright/test/reporter";
+import { TestResult } from '@playwright/test/reporter';
 
 export class AdvancedReporting {
   private results: TestResult[] = [];
@@ -17,13 +17,13 @@ export class AdvancedReporting {
   generatePerformanceReport(): PerformanceMetrics {
     const totalTests = this.results.length;
     const passedTests = this.results.filter(
-      (r) => r.status === "passed"
+      (r) => r.status === 'passed'
     ).length;
     const failedTests = this.results.filter(
-      (r) => r.status === "failed"
+      (r) => r.status === 'failed'
     ).length;
     const skippedTests = this.results.filter(
-      (r) => r.status === "skipped"
+      (r) => r.status === 'skipped'
     ).length;
 
     const totalDuration = this.results.reduce((sum, r) => sum + r.duration, 0);
@@ -60,7 +60,7 @@ export class AdvancedReporting {
           ? (flakyTests.length / this.results.length) * 100
           : 0,
       tests: flakyTests.map((test) => ({
-        title: test.title,
+        title: (test as any).title || 'Unknown Test',
         retries: test.retry,
         finalStatus: test.status,
         duration: test.duration,
@@ -78,7 +78,7 @@ export class AdvancedReporting {
     >();
 
     this.results.forEach((result) => {
-      const project = result.project?.name || "unknown";
+      const project = (result as any).project?.name || 'unknown';
       const stats = browserStats.get(project) || {
         passed: 0,
         failed: 0,
@@ -86,8 +86,8 @@ export class AdvancedReporting {
       };
 
       stats.total++;
-      if (result.status === "passed") stats.passed++;
-      if (result.status === "failed") stats.failed++;
+      if (result.status === 'passed') stats.passed++;
+      if (result.status === 'failed') stats.failed++;
 
       browserStats.set(project, stats);
     });
@@ -109,18 +109,18 @@ export class AdvancedReporting {
       metadata: {
         generatedAt: new Date().toISOString(),
         testStartTime: this.startTime.toISOString(),
-        framework: "Playwright Test Framework",
-        version: "1.0.0",
+        framework: 'Playwright Test Framework',
+        version: '1.0.0',
       },
       performance: this.generatePerformanceReport(),
       flaky: this.generateFlakyTestReport(),
       browsers: this.generateBrowserReport(),
       rawResults: this.results.map((r) => ({
-        title: r.title,
+        title: (r as any).title || 'Unknown Test',
         status: r.status,
         duration: r.duration,
         retry: r.retry,
-        project: r.project?.name,
+        project: (r as any).project?.name,
         error: r.error?.message,
       })),
     };
@@ -137,40 +137,40 @@ export class AdvancedReporting {
 
     const color =
       metrics.summary.passRate >= 95
-        ? "good"
+        ? 'good'
         : metrics.summary.passRate >= 80
-        ? "warning"
-        : "danger";
+          ? 'warning'
+          : 'danger';
 
     return {
-      text: "Test Results Summary",
+      text: 'Test Results Summary',
       attachments: [
         {
           color,
-          title: "Playwright Test Framework Results",
+          title: 'Playwright Test Framework Results',
           fields: [
             {
-              title: "Pass Rate",
+              title: 'Pass Rate',
               value: `${metrics.summary.passRate.toFixed(1)}%`,
               short: true,
             },
             {
-              title: "Total Tests",
+              title: 'Total Tests',
               value: metrics.summary.total.toString(),
               short: true,
             },
             {
-              title: "Failed Tests",
+              title: 'Failed Tests',
               value: metrics.summary.failed.toString(),
               short: true,
             },
             {
-              title: "Flaky Tests",
+              title: 'Flaky Tests',
               value: flaky.totalFlaky.toString(),
               short: true,
             },
           ],
-          footer: "Playwright Test Framework",
+          footer: 'Playwright Test Framework',
           ts: Math.floor(Date.now() / 1000),
         },
       ],
@@ -184,7 +184,7 @@ export class AdvancedReporting {
       prev.duration > current.duration ? prev : current
     );
 
-    return { title: slowest.title, duration: slowest.duration };
+    return { title: (slowest as any).title || 'Unknown Test', duration: slowest.duration };
   }
 
   private getFastestTest(): { title: string; duration: number } | null {
@@ -194,16 +194,16 @@ export class AdvancedReporting {
       prev.duration < current.duration ? prev : current
     );
 
-    return { title: fastest.title, duration: fastest.duration };
+    return { title: (fastest as any).title || 'Unknown Test', duration: fastest.duration };
   }
 
   private calculateTrends(): TrendData {
     // This would typically compare with historical data
     // For now, return basic trend indicators
     return {
-      passRateTrend: "stable", // "improving" | "declining" | "stable"
-      durationTrend: "stable",
-      flakyTrend: "stable",
+      passRateTrend: 'stable', // "improving" | "declining" | "stable"
+      durationTrend: 'stable',
+      flakyTrend: 'stable',
     };
   }
 }
@@ -248,9 +248,9 @@ interface BrowserReport {
 }
 
 interface TrendData {
-  passRateTrend: "improving" | "declining" | "stable";
-  durationTrend: "improving" | "declining" | "stable";
-  flakyTrend: "improving" | "declining" | "stable";
+  passRateTrend: 'improving' | 'declining' | 'stable';
+  durationTrend: 'improving' | 'declining' | 'stable';
+  flakyTrend: 'improving' | 'declining' | 'stable';
 }
 
 interface SlackNotification {

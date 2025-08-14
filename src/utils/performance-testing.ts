@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Page } from '@playwright/test';
 
 export class PerformanceTesting {
   constructor(private page: Page) {}
@@ -10,7 +10,7 @@ export class PerformanceTesting {
     await this.page.goto(url);
 
     // Wait for page to be fully loaded
-    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForLoadState('networkidle');
 
     // Get Web Vitals and performance metrics
     const metrics = await this.page.evaluate(() => {
@@ -21,7 +21,7 @@ export class PerformanceTesting {
           const vitals: any = {};
 
           entries.forEach((entry) => {
-            if (entry.entryType === "navigation") {
+            if (entry.entryType === 'navigation') {
               const nav = entry as PerformanceNavigationTiming;
               vitals.domContentLoaded =
                 nav.domContentLoadedEventEnd - nav.domContentLoadedEventStart;
@@ -29,21 +29,21 @@ export class PerformanceTesting {
               vitals.firstByte = nav.responseStart - nav.requestStart;
             }
 
-            if (entry.name === "first-contentful-paint") {
+            if (entry.name === 'first-contentful-paint') {
               vitals.firstContentfulPaint = entry.startTime;
             }
 
-            if (entry.name === "largest-contentful-paint") {
+            if (entry.name === 'largest-contentful-paint') {
               vitals.largestContentfulPaint = entry.startTime;
             }
           });
 
           // Resource timing
-          const resources = performance.getEntriesByType("resource");
+          const resources = performance.getEntriesByType('resource');
           const resourceMetrics = {
             totalResources: resources.length,
             totalSize: 0,
-            slowestResource: { name: "", duration: 0 },
+            slowestResource: { name: '', duration: 0 },
             resourceTypes: {} as Record<string, number>,
           };
 
@@ -57,7 +57,7 @@ export class PerformanceTesting {
             }
 
             // Count resource types
-            const type = resource.initiatorType || "other";
+            const type = resource.initiatorType || 'other';
             resourceMetrics.resourceTypes[type] =
               (resourceMetrics.resourceTypes[type] || 0) + 1;
 
@@ -72,16 +72,16 @@ export class PerformanceTesting {
             resources: resourceMetrics,
             memory: (performance as any).memory
               ? {
-                  usedJSHeapSize: (performance as any).memory.usedJSHeapSize,
-                  totalJSHeapSize: (performance as any).memory.totalJSHeapSize,
-                  jsHeapSizeLimit: (performance as any).memory.jsHeapSizeLimit,
-                }
+                usedJSHeapSize: (performance as any).memory.usedJSHeapSize,
+                totalJSHeapSize: (performance as any).memory.totalJSHeapSize,
+                jsHeapSizeLimit: (performance as any).memory.jsHeapSizeLimit,
+              }
               : null,
           });
         });
 
         observer.observe({
-          entryTypes: ["navigation", "paint", "largest-contentful-paint"],
+          entryTypes: ['navigation', 'paint', 'largest-contentful-paint'],
         });
 
         // Fallback timeout
@@ -92,7 +92,7 @@ export class PerformanceTesting {
             resources: {
               totalResources: 0,
               totalSize: 0,
-              slowestResource: { name: "", duration: 0 },
+              slowestResource: { name: '', duration: 0 },
               resourceTypes: {},
             },
             memory: null,
@@ -122,8 +122,8 @@ export class PerformanceTesting {
   ): Promise<PerformanceAnalysis> {
     // Set network conditions
     const client = await this.page.context().newCDPSession(this.page);
-    await client.send("Network.enable");
-    await client.send("Network.emulateNetworkConditions", {
+    await client.send('Network.enable');
+    await client.send('Network.emulateNetworkConditions', {
       offline: false,
       downloadThroughput: conditions.downloadThroughput,
       uploadThroughput: conditions.uploadThroughput,
@@ -133,7 +133,7 @@ export class PerformanceTesting {
     const analysis = await this.analyzePagePerformance(url);
 
     // Reset network conditions
-    await client.send("Network.emulateNetworkConditions", {
+    await client.send('Network.emulateNetworkConditions', {
       offline: false,
       downloadThroughput: -1,
       uploadThroughput: -1,
@@ -190,9 +190,15 @@ export class PerformanceTesting {
   async testMobilePerformance(url: string): Promise<MobilePerformanceResults> {
     // Set mobile viewport and user agent
     await this.page.setViewportSize({ width: 375, height: 667 });
-    await this.page.setUserAgent(
-      "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15"
-    );
+    // Note: setUserAgent is only available in Chromium-based browsers
+    try {
+      await this.page.context().setExtraHTTPHeaders({
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15'
+      });
+    } catch (error) {
+      // Fallback for non-Chromium browsers
+      console.log('User-Agent setting not supported in this browser');
+    }
 
     // Throttle network to simulate mobile conditions
     const mobileConditions: NetworkConditions = {
@@ -279,13 +285,13 @@ export class PerformanceTesting {
 
     if (scores.firstContentfulPaint < 75) {
       recommendations.push(
-        "Optimize First Contentful Paint by reducing render-blocking resources"
+        'Optimize First Contentful Paint by reducing render-blocking resources'
       );
     }
 
     if (scores.largestContentfulPaint < 75) {
       recommendations.push(
-        "Improve Largest Contentful Paint by optimizing main content loading"
+        'Improve Largest Contentful Paint by optimizing main content loading'
       );
     }
 
@@ -298,12 +304,12 @@ export class PerformanceTesting {
     if (metrics.resources.totalSize > 2 * 1024 * 1024) {
       // 2MB
       recommendations.push(
-        "Optimize resource sizes - total transfer size is high"
+        'Optimize resource sizes - total transfer size is high'
       );
     }
 
-    if (metrics.webVitals.firstByte > 600) {
-      recommendations.push("Improve server response time (TTFB)");
+    if (metrics.webVitals.firstByte && metrics.webVitals.firstByte > 600) {
+      recommendations.push('Improve server response time (TTFB)');
     }
 
     return recommendations;
@@ -312,7 +318,7 @@ export class PerformanceTesting {
   private async analyzeTouchTargets(): Promise<TouchTargetAnalysis> {
     return this.page.evaluate(() => {
       const elements = document.querySelectorAll(
-        "button, a, input, select, textarea"
+        'button, a, input, select, textarea'
       );
       const smallTargets: string[] = [];
       const totalTargets = elements.length;
@@ -386,7 +392,7 @@ export class PerformanceTesting {
         },
         errors,
         recommendations: [
-          "All requests failed - check server capacity and configuration",
+          'All requests failed - check server capacity and configuration',
         ],
       };
     }
@@ -429,19 +435,19 @@ export class PerformanceTesting {
 
     if (avgLoad > 5000) {
       recommendations.push(
-        "High average response time under load - consider server scaling"
+        'High average response time under load - consider server scaling'
       );
     }
 
     if (errors.length > results.length * 0.1) {
       recommendations.push(
-        "High error rate - check server stability and capacity"
+        'High error rate - check server stability and capacity'
       );
     }
 
     if (results.length < 10) {
       recommendations.push(
-        "Consider running more iterations for better statistical significance"
+        'Consider running more iterations for better statistical significance'
       );
     }
 

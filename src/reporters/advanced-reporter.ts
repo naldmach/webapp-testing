@@ -1,4 +1,9 @@
-import { Reporter, TestCase, TestResult, FullResult } from "@playwright/test/reporter";
+import {
+  Reporter,
+  TestCase,
+  TestResult,
+  FullResult,
+} from "@playwright/test/reporter";
 import { AdvancedReporting } from "../utils/advanced-reporting";
 import fs from "fs";
 import path from "path";
@@ -27,25 +32,29 @@ export class AdvancedReporter implements Reporter {
     console.log(`${status} ${test.title} (${duration})`);
   }
 
-  async onEnd(result: FullResult) {
+  async onEnd(_result: FullResult) {
     const endTime = new Date();
     const totalDuration = endTime.getTime() - this.startTime.getTime();
 
-    console.log(`\n📊 Test Execution Complete`);
+    console.log("\n📊 Test Execution Complete");
     console.log(`⏱️  Total Duration: ${totalDuration}ms`);
 
     // Generate comprehensive reports
     await this.generateReports();
-    
+
     // Generate notifications if configured
     await this.sendNotifications();
 
-    console.log(`\n📋 Reports generated in: test-results/advanced-reports/`);
+    console.log("\n📋 Reports generated in: test-results/advanced-reports/");
   }
 
   private async generateReports() {
-    const reportsDir = path.join(process.cwd(), "test-results", "advanced-reports");
-    
+    const reportsDir = path.join(
+      process.cwd(),
+      "test-results",
+      "advanced-reports"
+    );
+
     // Ensure directory exists
     if (!fs.existsSync(reportsDir)) {
       fs.mkdirSync(reportsDir, { recursive: true });
@@ -59,7 +68,8 @@ export class AdvancedReporter implements Reporter {
     );
 
     // Generate performance report
-    const performanceMetrics = this.advancedReporting.generatePerformanceReport();
+    const performanceMetrics =
+      this.advancedReporting.generatePerformanceReport();
     fs.writeFileSync(
       path.join(reportsDir, "performance-metrics.json"),
       JSON.stringify(performanceMetrics, null, 2)
@@ -80,14 +90,18 @@ export class AdvancedReporter implements Reporter {
     );
 
     // Generate HTML summary report
-    await this.generateHtmlSummary(performanceMetrics, flakyReport, browserReport);
+    await this.generateHtmlSummary(
+      performanceMetrics,
+      flakyReport,
+      browserReport
+    );
 
-    console.log(`✅ Advanced reports generated:`);
-    console.log(`   📄 JSON Report: advanced-test-report.json`);
-    console.log(`   📊 Performance: performance-metrics.json`);
-    console.log(`   🔄 Flaky Tests: flaky-tests.json`);
-    console.log(`   🌐 Browser Compatibility: browser-compatibility.json`);
-    console.log(`   📋 HTML Summary: test-summary.html`);
+    console.log("✅ Advanced reports generated:");
+    console.log("   📄 JSON Report: advanced-test-report.json");
+    console.log("   📊 Performance: performance-metrics.json");
+    console.log("   🔄 Flaky Tests: flaky-tests.json");
+    console.log("   🌐 Browser Compatibility: browser-compatibility.json");
+    console.log("   📋 HTML Summary: test-summary.html");
   }
 
   private async generateHtmlSummary(
@@ -221,7 +235,9 @@ export class AdvancedReporter implements Reporter {
 
         <div class="metric-grid">
             <div class="metric-card pass-rate">
-                <div class="metric-value">${performance.summary.passRate.toFixed(1)}%</div>
+                <div class="metric-value">${performance.summary.passRate.toFixed(
+                  1
+                )}%</div>
                 <div class="metric-label">Pass Rate</div>
             </div>
             <div class="metric-card total-tests">
@@ -240,31 +256,51 @@ export class AdvancedReporter implements Reporter {
 
         <div class="section">
             <h2>⏱️ Performance Metrics</h2>
-            <p><strong>Total Duration:</strong> ${performance.timing.totalDuration}ms</p>
-            <p><strong>Average Duration:</strong> ${performance.timing.averageDuration.toFixed(0)}ms</p>
-            ${performance.timing.slowestTest ? `
+            <p><strong>Total Duration:</strong> ${
+              performance.timing.totalDuration
+            }ms</p>
+            <p><strong>Average Duration:</strong> ${performance.timing.averageDuration.toFixed(
+              0
+            )}ms</p>
+            ${
+              performance.timing.slowestTest
+                ? `
             <p><strong>Slowest Test:</strong> ${performance.timing.slowestTest.title} (${performance.timing.slowestTest.duration}ms)</p>
-            ` : ''}
-            ${performance.timing.fastestTest ? `
+            `
+                : ""
+            }
+            ${
+              performance.timing.fastestTest
+                ? `
             <p><strong>Fastest Test:</strong> ${performance.timing.fastestTest.title} (${performance.timing.fastestTest.duration}ms)</p>
-            ` : ''}
+            `
+                : ""
+            }
         </div>
 
         <div class="section">
             <h2>🌐 Browser Compatibility</h2>
             <ul class="browser-list">
-                ${browser.browsers.map((b: any) => `
+                ${browser.browsers
+                  .map(
+                    (b: any) => `
                 <li class="browser-item">
                     <span class="browser-name">${b.name}</span>
                     <span class="browser-stats">
-                        ${b.passed}/${b.total} passed (${b.passRate.toFixed(1)}%)
+                        ${b.passed}/${b.total} passed (${b.passRate.toFixed(
+                      1
+                    )}%)
                     </span>
                 </li>
-                `).join('')}
+                `
+                  )
+                  .join("")}
             </ul>
         </div>
 
-        ${flaky.totalFlaky > 0 ? `
+        ${
+          flaky.totalFlaky > 0
+            ? `
         <div class="section">
             <h2>🔄 Flaky Tests Analysis</h2>
             <p><strong>Flaky Rate:</strong> ${flaky.flakyRate.toFixed(1)}%</p>
@@ -278,7 +314,9 @@ export class AdvancedReporter implements Reporter {
                 </ul>
             </div>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
 
         <div class="timestamp">
             Report generated on ${new Date().toLocaleString()}
@@ -288,28 +326,34 @@ export class AdvancedReporter implements Reporter {
 </html>
     `;
 
-    const reportsDir = path.join(process.cwd(), "test-results", "advanced-reports");
+    const reportsDir = path.join(
+      process.cwd(),
+      "test-results",
+      "advanced-reports"
+    );
     fs.writeFileSync(path.join(reportsDir, "test-summary.html"), htmlContent);
   }
 
   private async sendNotifications() {
     // Check if Slack webhook is configured
     const slackWebhook = process.env.SLACK_WEBHOOK_URL;
-    
+
     if (slackWebhook) {
       try {
         const notification = this.advancedReporting.generateSlackNotification();
-        
+
         const response = await fetch(slackWebhook, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(notification)
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(notification),
         });
 
         if (response.ok) {
-          console.log(`📱 Slack notification sent successfully`);
+          console.log("📱 Slack notification sent successfully");
         } else {
-          console.log(`⚠️  Failed to send Slack notification: ${response.statusText}`);
+          console.log(
+            `⚠️  Failed to send Slack notification: ${response.statusText}`
+          );
         }
       } catch (error) {
         console.log(`⚠️  Error sending Slack notification: ${error}`);
@@ -319,11 +363,16 @@ export class AdvancedReporter implements Reporter {
 
   private getStatusIcon(status: string): string {
     switch (status) {
-      case 'passed': return '✅';
-      case 'failed': return '❌';
-      case 'skipped': return '⏭️';
-      case 'timedOut': return '⏰';
-      default: return '❓';
+      case "passed":
+        return "✅";
+      case "failed":
+        return "❌";
+      case "skipped":
+        return "⏭️";
+      case "timedOut":
+        return "⏰";
+      default:
+        return "❓";
     }
   }
 }

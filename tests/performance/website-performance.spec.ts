@@ -1,19 +1,19 @@
-import { test, expect } from "../../src/base/base-test";
-import { PerformanceTesting } from "../../src/utils/performance-testing";
+import { test, expect } from '../../src/base/base-test';
+import { PerformanceTesting } from '../../src/utils/performance-testing';
 
-test.describe("Website Performance Tests", () => {
+test.describe('Website Performance Tests', () => {
   let performanceTesting: PerformanceTesting;
 
   test.beforeEach(async ({ page }) => {
     performanceTesting = new PerformanceTesting(page);
   });
 
-  test("Playwright.dev homepage performance", async ({ page }) => {
+  test('Playwright.dev homepage performance', async () => {
     const analysis = await performanceTesting.analyzePagePerformance(
-      "https://playwright.dev"
+      'https://playwright.dev'
     );
 
-    console.log("Performance Analysis:", {
+    console.log('Performance Analysis:', {
       url: analysis.url,
       scores: analysis.scores,
       recommendations: analysis.recommendations
@@ -26,16 +26,16 @@ test.describe("Website Performance Tests", () => {
 
     // Log recommendations if performance is poor
     if (analysis.scores.overall < 80) {
-      console.log("🔧 Performance Recommendations:", analysis.recommendations);
+      console.log('🔧 Performance Recommendations:', analysis.recommendations);
     }
   });
 
-  test("Mobile performance test", async ({ page }) => {
+  test('Mobile performance test', async () => {
     const mobileResults = await performanceTesting.testMobilePerformance(
-      "https://playwright.dev"
+      'https://playwright.dev'
     );
 
-    console.log("Mobile Performance:", {
+    console.log('Mobile Performance:', {
       scores: mobileResults.scores,
       mobileSpecific: {
         touchTargets: mobileResults.mobileSpecific.touchTargetAnalysis,
@@ -49,7 +49,7 @@ test.describe("Website Performance Tests", () => {
     expect(mobileResults.mobileSpecific.scrollPerformance.duration).toBeLessThan(5000); // Scroll test < 5s
   });
 
-  test("Network throttling performance", async ({ page }) => {
+  test('Network throttling performance', async () => {
     // Test with slow 3G conditions
     const slowConditions = {
       downloadThroughput: 500 * 1024 / 8, // 500 Kbps
@@ -58,11 +58,11 @@ test.describe("Website Performance Tests", () => {
     };
 
     const throttledResults = await performanceTesting.testWithThrottling(
-      "https://playwright.dev",
+      'https://playwright.dev',
       slowConditions
     );
 
-    console.log("Throttled Performance:", {
+    console.log('Throttled Performance:', {
       conditions: throttledResults.networkConditions,
       scores: throttledResults.scores,
       loadTime: throttledResults.metrics.webVitals.loadComplete
@@ -73,10 +73,10 @@ test.describe("Website Performance Tests", () => {
     expect(throttledResults.metrics.webVitals.loadComplete || 0).toBeLessThan(15000); // < 15s on slow network
   });
 
-  test("Load testing simulation", async ({ page }) => {
+  test('Load testing simulation', async () => {
     // Small load test (suitable for demo)
     const loadTestResults = await performanceTesting.loadTest(
-      "https://playwright.dev", 
+      'https://playwright.dev', 
       {
         concurrent: 2,
         iterations: 3,
@@ -84,7 +84,7 @@ test.describe("Website Performance Tests", () => {
       }
     );
 
-    console.log("Load Test Results:", loadTestResults.summary);
+    console.log('Load Test Results:', loadTestResults.summary);
 
     // Load test assertions
     expect(loadTestResults.summary.successRate).toBeGreaterThan(80); // 80% success rate
@@ -92,11 +92,11 @@ test.describe("Website Performance Tests", () => {
     expect(loadTestResults.errors.length).toBeLessThan(2); // < 2 errors
   });
 
-  test("Performance comparison test", async ({ page }) => {
+  test('Performance comparison test', async () => {
     // Test multiple pages and compare
     const pages = [
-      "https://playwright.dev",
-      "https://playwright.dev/docs/intro"
+      'https://playwright.dev',
+      'https://playwright.dev/docs/intro'
     ];
 
     const results = [];
@@ -111,7 +111,7 @@ test.describe("Website Performance Tests", () => {
       });
     }
 
-    console.log("Performance Comparison:", results);
+    console.log('Performance Comparison:', results);
 
     // Comparative analysis
     const avgScore = results.reduce((sum, r) => sum + r.score, 0) / results.length;

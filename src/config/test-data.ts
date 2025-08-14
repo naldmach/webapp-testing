@@ -7,7 +7,7 @@ export interface TestUser {
   password: string;
   firstName?: string;
   lastName?: string;
-  role?: "admin" | "user" | "moderator";
+  role?: 'admin' | 'user' | 'moderator';
 }
 
 export interface TestProduct {
@@ -40,62 +40,62 @@ export class TestDataManager {
     // Default test users
     this.users = [
       {
-        username: "testuser",
-        email: "testuser@example.com",
-        password: "TestPassword123!",
-        firstName: "Test",
-        lastName: "User",
-        role: "user",
+        username: 'testuser',
+        email: 'testuser@example.com',
+        password: 'TestPassword123!',
+        firstName: 'Test',
+        lastName: 'User',
+        role: 'user',
       },
       {
-        username: "adminuser",
-        email: "admin@example.com",
-        password: "AdminPassword123!",
-        firstName: "Admin",
-        lastName: "User",
-        role: "admin",
+        username: 'adminuser',
+        email: 'admin@example.com',
+        password: 'AdminPassword123!',
+        firstName: 'Admin',
+        lastName: 'User',
+        role: 'admin',
       },
       {
-        username: "moderator",
-        email: "moderator@example.com",
-        password: "ModeratorPassword123!",
-        firstName: "Moderator",
-        lastName: "User",
-        role: "moderator",
+        username: 'moderator',
+        email: 'moderator@example.com',
+        password: 'ModeratorPassword123!',
+        firstName: 'Moderator',
+        lastName: 'User',
+        role: 'moderator',
       },
     ];
 
     // Default test products
     this.products = [
       {
-        name: "Test Product 1",
-        description: "This is a test product for automation testing",
+        name: 'Test Product 1',
+        description: 'This is a test product for automation testing',
         price: 19.99,
-        category: "Electronics",
+        category: 'Electronics',
         inStock: true,
-        imageUrl: "https://via.placeholder.com/300x300",
+        imageUrl: 'https://via.placeholder.com/300x300',
       },
       {
-        name: "Test Product 2",
-        description: "Another test product for automation testing",
+        name: 'Test Product 2',
+        description: 'Another test product for automation testing',
         price: 29.99,
-        category: "Books",
+        category: 'Books',
         inStock: true,
-        imageUrl: "https://via.placeholder.com/300x300",
+        imageUrl: 'https://via.placeholder.com/300x300',
       },
       {
-        name: "Out of Stock Product",
-        description: "This product is out of stock for testing",
+        name: 'Out of Stock Product',
+        description: 'This product is out of stock for testing',
         price: 39.99,
-        category: "Clothing",
+        category: 'Clothing',
         inStock: false,
-        imageUrl: "https://via.placeholder.com/300x300",
+        imageUrl: 'https://via.placeholder.com/300x300',
       },
     ];
   }
 
   // User management methods
-  public getUser(role: "admin" | "user" | "moderator" = "user"): TestUser {
+  public getUser(role: 'admin' | 'user' | 'moderator' = 'user'): TestUser {
     const user = this.users.find((u) => u.role === role);
     if (!user) {
       throw new Error(`No test user found with role: ${role}`);
@@ -112,10 +112,10 @@ export class TestDataManager {
     const newUser: TestUser = {
       username: userData.username || `testuser${timestamp}`,
       email: userData.email || `test${timestamp}@example.com`,
-      password: userData.password || "TestPassword123!",
-      firstName: userData.firstName || "Test",
-      lastName: userData.lastName || "User",
-      role: userData.role || "user",
+      password: userData.password || 'TestPassword123!',
+      firstName: userData.firstName || 'Test',
+      lastName: userData.lastName || 'User',
+      role: userData.role || 'user',
       id: `user_${timestamp}`,
     };
 
@@ -149,11 +149,11 @@ export class TestDataManager {
     const timestamp = Date.now();
     const newProduct: TestProduct = {
       name: productData.name || `Test Product ${timestamp}`,
-      description: productData.description || "Auto-generated test product",
+      description: productData.description || 'Auto-generated test product',
       price: productData.price || 19.99,
-      category: productData.category || "Test Category",
+      category: productData.category || 'Test Category',
       inStock: productData.inStock ?? true,
-      imageUrl: productData.imageUrl || "https://via.placeholder.com/300x300",
+      imageUrl: productData.imageUrl || 'https://via.placeholder.com/300x300',
       id: `product_${timestamp}`,
     };
 
@@ -176,8 +176,8 @@ export class TestDataManager {
 
   public generateRandomPassword(): string {
     const chars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-    let password = "";
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+    let password = '';
     for (let i = 0; i < 12; i++) {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -186,12 +186,12 @@ export class TestDataManager {
 
   // Cleanup methods
   public clearGeneratedUsers(): void {
-    this.users = this.users.filter((user) => !user.id?.startsWith("user_"));
+    this.users = this.users.filter((user) => !user.id?.startsWith('user_'));
   }
 
   public clearGeneratedProducts(): void {
     this.products = this.products.filter(
-      (product) => !product.id?.startsWith("product_")
+      (product) => !product.id?.startsWith('product_')
     );
   }
 

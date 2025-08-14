@@ -1,4 +1,4 @@
-import { Page, expect } from "@playwright/test";
+import { Page, expect } from '@playwright/test';
 
 export class VisualTesting {
   constructor(private page: Page) {}
@@ -11,16 +11,16 @@ export class VisualTesting {
     options?: {
       threshold?: number;
       maxDiffPixels?: number;
-      animations?: "disabled" | "allow";
+      animations?: 'disabled' | 'allow';
     }
   ): Promise<void> {
     // Disable animations for consistent screenshots
-    if (options?.animations === "disabled") {
+    if (options?.animations === 'disabled') {
       await this.disableAnimations();
     }
 
     // Wait for page to be stable
-    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForLoadState('networkidle');
     await this.page.waitForTimeout(1000);
 
     await expect(this.page).toHaveScreenshot(`${testName}-full-page.png`, {
@@ -43,7 +43,7 @@ export class VisualTesting {
     }
   ): Promise<void> {
     const element = this.page.locator(selector);
-    await element.waitFor({ state: "visible" });
+    await element.waitFor({ state: 'visible' });
 
     // Mask dynamic content if specified
     const maskLocators =
@@ -64,7 +64,7 @@ export class VisualTesting {
     for (let i = 0; i < selectors.length; i++) {
       const selector = selectors[i];
       const element = this.page.locator(selector);
-      await element.waitFor({ state: "visible" });
+      await element.waitFor({ state: 'visible' });
 
       await expect(element).toHaveScreenshot(
         `${testName}-element-${i + 1}.png`,
@@ -99,7 +99,7 @@ export class VisualTesting {
    */
   async waitForImages(): Promise<void> {
     await this.page.waitForFunction(() => {
-      const images = Array.from(document.querySelectorAll("img"));
+      const images = Array.from(document.querySelectorAll('img'));
       return images.every((img) => img.complete && img.naturalHeight !== 0);
     });
   }
@@ -110,7 +110,7 @@ export class VisualTesting {
   async hideDynamicContent(selectors: string[]): Promise<void> {
     for (const selector of selectors) {
       await this.page.locator(selector).evaluate((el) => {
-        (el as HTMLElement).style.visibility = "hidden";
+        (el as HTMLElement).style.visibility = 'hidden';
       });
     }
   }
